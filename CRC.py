@@ -22,7 +22,7 @@ def calcula_grau(gx):
             grau += 1
     return grau - 1
 
-#verificação do gx (falta fazer)
+#verificação do gx
 def verifica(gx):
     if (len(gx) >= 2 and gx[0] == '1' and gx[len(gx)-1] == '1'):
         return True
@@ -57,25 +57,33 @@ def divisao(dividendo, divisor):
         temp = xor('0'*pick, temp) 
    
     checkword = temp 
-    return checkword 
+    return checkword
 
 def main():
 
     print("------ Sender side -----\n")
     word = input("Palavra a ser transmitida: ")
-    gx = input("Polinômio gerador: ")
+    
+    while True:
+        gx = input("Polinômio gerador: ")
+        if(verifica(gx)):
+            break
+        else:
+            print("Polinômio inválido.")
+
     grau = calcula_grau(gx)
-    print("o grau do polinômio é ", grau)
+    print("O grau do polinômio é ", grau)
     word_encoded = palavra_seeder(word, grau)
-    print("palavra a ser enviada: ", word_encoded)
+    print("Palavra a ser enviada: ", word_encoded)
     crc = divisao(word_encoded, gx)
-    print("crc:", crc)
+    print("CRC:", crc)
 
     print("------ Receiver side ------\n")
     rec_word = palavra_rec(word, crc)
-    print("palavra recebida: ", rec_word)
+    print("Palavra recebida: ", rec_word)
     resto = divisao(rec_word, crc)
-    print("resto da divisão: ", resto)
+    print("Resto da divisão: ", resto)
+
     if resto == '0'*(grau-1):
         print("A palavra chegou corretamente.\n")
     else:
